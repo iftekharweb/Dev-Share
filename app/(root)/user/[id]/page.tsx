@@ -1,8 +1,11 @@
 import { auth } from "@/auth";
+import { BlogCardSkeleton } from "@/components/BlogCard";
+import UserBlogs from "@/components/UserBlogs";
 import { client } from "@/sanity/lib/client";
 import { AUTHOR_BY_ID_QUERY } from "@/sanity/lib/queries";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -40,6 +43,11 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           <p className="text-30-bold">
             {session?.id === id ? "Your" : "All"} Blogs
           </p>
+          <ul className="card_grid-sm">
+            <Suspense fallback={<BlogCardSkeleton />}>
+              <UserBlogs id={id} />
+            </Suspense>
+          </ul>
         </div>
       </section>
     </>

@@ -1,10 +1,11 @@
-import { formatDate } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import { EyeIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import ci from "../public/images.jpeg";
 import { Button } from "./ui/button";
 import { Author, Blog } from "@/sanity/types";
+import { Skeleton } from "./ui/skeleton";
 
 export type BlogTypeCard = Omit<Blog, "author"> & {author?: Author};
 
@@ -63,5 +64,15 @@ const BlogCard = ({ post }: { post: BlogTypeCard }) => {
     </li>
   );
 };
+
+export const BlogCardSkeleton = () => (
+  <>
+    {[0, 1, 2, 3, 4].map((index: number) => (
+      <li key={cn("skeleton", index)}>
+        <Skeleton className="startup-card_skeleton" />
+      </li>
+    ))}
+  </>
+);
 
 export default BlogCard;
