@@ -24,8 +24,7 @@ export default async function Home({
         </h1>
         <p className="sub-heading !max-w-3xl">
           {" "}
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-          et obcaecati.
+          "Dev Share is the ultimate platform for developers to share knowledge, insights, and experiences with the world. Empower the tech community by contributing your expertise and learning from others!"
         </p>
         <SearchForm query={query} />
       </section>
