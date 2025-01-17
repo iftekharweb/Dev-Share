@@ -125,6 +125,23 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
+export type Playlist = {
+  _id: string;
+  _type: "playlist";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  select?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "blog";
+  }>;
+};
+
 export type Blog = {
   _id: string;
   _type: "blog";
@@ -168,12 +185,22 @@ export type Author = {
 
 export type Markdown = string;
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | SanityAssetSourceData | Blog | Slug | Author | Markdown;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | SanityAssetSourceData | Playlist | Blog | Slug | Author | Markdown;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: sanity/lib/queries.ts
 // Variable: BLOGS_QUERY
 // Query: *[_type == "blog" && defined(slug.current) && !defined($search) || category match $search || author->name match $search || title match $search] | order(_createdAt desc) {  _id,   title,   slug,   _createdAt,   description,   author -> {_id, name, bio, image},  views,   description,  category,  image}
 export type BLOGS_QUERYResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  _createdAt: string;
+  description: null;
+  author: null;
+  views: null;
+  category: null;
+  image: null;
+} | {
   _id: string;
   title: null;
   slug: null;
@@ -257,6 +284,24 @@ export type AUTHOR_BY_ID_QUERYResult = {
   image: string | null;
   bio: string | null;
 } | null;
+// Variable: BLOGS_BY_AUTHOR_QUERY
+// Query: *[_type == "blog" && author._ref == $id] | order(_createdAt desc) {  _id,   title,   slug,   _createdAt,   description,   author -> {_id, name, bio, image},  views,   description,  category,  image}
+export type BLOGS_BY_AUTHOR_QUERYResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  _createdAt: string;
+  description: string | null;
+  author: {
+    _id: string;
+    name: string | null;
+    bio: string | null;
+    image: string | null;
+  } | null;
+  views: number | null;
+  category: string | null;
+  image: string | null;
+}>;
 
 // Query TypeMap
 import "@sanity/client";
@@ -267,5 +312,6 @@ declare module "@sanity/client" {
     "\n  *[_type == \"blog\" && _id == $id][0]{\n      _id, views\n  }\n": BLOG_VIEWS_QUERYResult;
     "\n  *[_type == \"author\" && id == $id][0]{\n      _id,\n      id,\n      name,\n      username,\n      email,\n      image,\n      bio\n  }\n  ": AUTHOR_BY_GITHUB_ID_QUERYResult;
     "\n  *[_type == \"author\" && _id == $id][0]{\n      _id,\n      id,\n      name,\n      username,\n      email,\n      image,\n      bio\n  }\n  ": AUTHOR_BY_ID_QUERYResult;
+    "*[_type == \"blog\" && author._ref == $id] | order(_createdAt desc) {\n  _id, \n  title, \n  slug, \n  _createdAt, \n  description, \n  author -> {_id, name, bio, image},\n  views, \n  description,\n  category,\n  image\n}": BLOGS_BY_AUTHOR_QUERYResult;
   }
 }

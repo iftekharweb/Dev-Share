@@ -1,13 +1,10 @@
 import { auth, signIn, signOut } from "@/auth";
-import Image from "next/image";
 import Link from "next/link";
-import { Button } from "./ui/button";
 import { BadgePlus, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const Navbar = async () => {
   const session = await auth();
-  console.log(session);
 
   return (
     <header className="px-5 py-2 bg-white shadow-sm font-work-sans">
